@@ -21,7 +21,7 @@ Class Activation Maps (CAMs).
 
 Densenet.
 
-Tensorflow.
+Tensorflow, Keras, Numpy, Pandas.
 
 ## Dataset
 
@@ -29,7 +29,7 @@ Se fomos ter somente classificação (fraturado ou não fraturado), podemos util
 
 [Paper](https://arxiv.org/pdf/1712.06957)
 
-[Stanford AIMI Shared Datasets]https://stanfordaimi.azurewebsites.net/datasets/3e00d84b-d86e-4fed-b2a4-bfe3effd661b
+[Stanford AIMI Shared Datasets](https://stanfordaimi.azurewebsites.net/datasets/3e00d84b-d86e-4fed-b2a4-bfe3effd661b)
 
 Possui 2185 imagens, onde:
 - Treino:
@@ -47,7 +47,7 @@ Se fomos ter segmentação (qual tipo da fratura) no nosso projeto, pensar na ut
 
 [figshare - FracAtlas: A Dataset for Fracture Classification, Localization and Segmentation of Musculoskeletal Radiographs](https://figshare.com/articles/dataset/The_dataset/22363012)
 
-Esse dataset possui 1.538 imagens de mãos, onde 437 são fraturadas. 
+Esse dataset possui 1.538 imagens de mãos, onde 437 são fraturadas. Nesse segundo dataset, temos imagens do tipo Coronal (de frente), Transversal (de cima) e Sagital (de lado).
 
 OBS.: É possível unir ambos os datasets para ter um maior volume de dados. 
 OBS. 2: Em ambos os datasets, precisa fazer um pré-processamento dos dados para deixar somente as imagens de X-RAY das mãos. 
