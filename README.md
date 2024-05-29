@@ -2,7 +2,13 @@
 
 Repositório para iniciação cientifica da FIAP (2024).
 
-Detecção de fraturas nas mãos em imagens X-RAY. 
+A ideia principal é construir uma solução baseada em IA que sirva de apoio ao médico dentro do consultório.
+
+À partir disso, todos os recursos que desenvolvermos, funcionará tal como módulos integrativos dentro dessa solução.
+
+Assim, teremos um MVP com um módulo para análise de imagens médicas de diferentes segmentos do corpo, começando pelas mãos, e, posteriormente, adicionaremos outros módulos assistivos para o médico, como um módulo para captação de voz entre a conversa do médico-paciente para elaboração do diagnóstico do paciente, agilizando o processo  de preescrição de receitas e afins.
+
+Por fim, como os dados estão em domínio da nossa solução, o histórico dos pacientes poderá ser compartilhados entre diferentes hospitais à partir da adoção da solução, de tal modo que o histórico do paciente poderia ser facilmente consultado.
 
 ## Fluxograma
 ![Cenário 1](https://github.com/LeandroLuna/undergraduate-research-2024/assets/29809108/34566a78-abe8-45a0-915a-7ad746974c88)
@@ -13,17 +19,17 @@ Detecção de fraturas nas mãos em imagens X-RAY.
 
 ## Tecnologias
 
-CNN, YOLO e U-NET.
+CNN: YOLO, U-NET e/ou Densenet.
 
 Python.
 
 Class Activation Maps (CAMs).
 
-Densenet.
-
 Tensorflow, Keras, Numpy, Pandas.
 
 FastAPI.
+
+Docker.
 
 ## Arquitetura
 
