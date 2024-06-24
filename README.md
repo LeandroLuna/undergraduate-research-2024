@@ -23,7 +23,7 @@ CNN: YOLO, U-NET e/ou Densenet.
 
 Python.
 
-Class Activation Maps (CAMs).
+Grad-CAM.
 
 Tensorflow, Keras, Numpy, Pandas.
 
