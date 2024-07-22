@@ -11,11 +11,8 @@ Assim, teremos um MVP com um módulo para análise de imagens médicas de difere
 Por fim, como os dados estão em domínio da nossa solução, o histórico dos pacientes poderá ser compartilhados entre diferentes hospitais à partir da adoção da solução, de tal modo que o histórico do paciente poderia ser facilmente consultado.
 
 ## Fluxograma
-![Cenário 1](https://github.com/LeandroLuna/undergraduate-research-2024/assets/29809108/34566a78-abe8-45a0-915a-7ad746974c88)
 
-<hr>
-
-![Cenário 2](https://github.com/LeandroLuna/undergraduate-research-2024/assets/29809108/a19f3ef8-0e39-4aed-85df-034e56547535)
+![Cenário](https://github.com/LeandroLuna/undergraduate-research-2024/assets/29809108/34566a78-abe8-45a0-915a-7ad746974c88)
 
 ## Tecnologias
 
