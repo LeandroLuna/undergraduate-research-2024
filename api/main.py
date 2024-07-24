@@ -1,45 +1,24 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI
 import uvicorn
-import subprocess
-import os
-from pathlib import Path
+from routes import detect, segment
 
-app = FastAPI()
+app = FastAPI(
+    title="Fracture Vision API",
+    description="API for detecting and segmenting fractures using YOLO models.",
+    version="1.0.0",
+    contact={
+        "name": "Leandro Luna",
+        "url": "https://www.linkedin.com/in/luna-leandro/",
+        "email": "leandro.j.luna@gmail.com"
+    }
+)
 
-model_path = Path("../models/detect/model_detect_only_hands.pt")
-output_dir = Path("temp")
+app.include_router(detect.router, prefix="/v1/detect", tags=["Detections"])
+app.include_router(segment.router, prefix="/v1/segment", tags=["Segmentation"])
 
 @app.get("/")
 async def home():
     return {"message": "Fracture Vision API is running!"}
-
-@app.post("/predict/")
-async def predict(file: UploadFile = File(...)):
-    if file.content_type not in ["image/png", "image/jpeg", "image/bmp", "image/jpg"]:
-        raise HTTPException(status_code=400, detail="Invalid file format. Supported formats: png, jpg, jpeg, bmp")
-
-    temp_file_path = output_dir / file.filename
-    with open(temp_file_path, "wb") as f:
-        f.write(await file.read())
-
-    if not temp_file_path.exists():
-        raise HTTPException(status_code=500, detail="Failed to save the file")
-
-    yolo_command = (
-        f"yolo task=detect mode=predict save=True model={model_path} conf=0.25 source={temp_file_path}"
-    )
-
-    try:
-        subprocess.run(yolo_command, shell=True, check=True)
-    except subprocess.CalledProcessError:
-        raise HTTPException(status_code=500, detail="Failed to run YOLO command")
-
-    output_files = list(output_dir.glob("*"))
-    results = [str(file) for file in output_files]
-
-    temp_file_path.unlink()
-
-    return {"results": results}
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
