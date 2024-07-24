@@ -3,26 +3,18 @@ import numpy as np
 
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from pathlib import Path
-from pydantic import BaseModel
 from ultralytics import YOLO
 from PIL import Image
 
 from utils.constants import OUTPUT_DIR, SUPPORTED_IMAGE_FORMATS
+from utils.aws_helpers import upload_file_to_s3, insert_prediction_data, get_prediction_by_id
+from utils.helpers import generate_id_from_image
+from models.prediction import PredictionResult, PredictionResponse
 
 router = APIRouter()
 
-model_path = "../models/segment/model_seg_all_body.pt"
+model_path = "pytorch/segment/model_seg_all_body.pt"
 model = YOLO(model_path)
-
-class PredictionResult(BaseModel):
-    id: int
-    fractured: bool
-    img_file_path: str
-    img_labels_file_path: str
-    object: str
-
-class PredictionResponse(BaseModel):
-    results: list[PredictionResult]
 
 @router.post("/predict", response_model=PredictionResponse, summary="Segment objects in an image", response_description="A object containing the segmentation prediction results")
 async def predict(file: UploadFile = File(...)):
@@ -31,26 +23,44 @@ async def predict(file: UploadFile = File(...)):
 
     image_data = await file.read()
     image = Image.open(io.BytesIO(image_data))
-
-    results = model.predict(source=image, conf=0.25, imgsz=608)
+    id = generate_id_from_image(image)
     
-    prediction_results = []
-    for i, result in enumerate(results):
-        output_image_path = OUTPUT_DIR / f"prediction_{i}.png"
-        output_text_path = OUTPUT_DIR / f"prediction_{i}.txt"
-        
-        # result_image = result.plot()
-        result.save(output_image_path)
-        result.save_txt(output_text_path)
-        
-        prediction_result = PredictionResult(
-            id=i,
-            fractured=True if result.masks != None else False,
-            img_file_path=str(output_image_path),
-            img_labels_file_path=str(output_text_path),
-            object=result.tojson()
-        )
-        
-        prediction_results.append(prediction_result)
+    db_info = get_prediction_by_id(id)
 
-    return {"results": prediction_results}
+    if db_info is not None:
+        return {"results": PredictionResult(
+                id=id,
+                fractured=db_info[1],
+                img_file_path=db_info[2],
+                img_labels_file_path=db_info[3],
+                object=str(db_info[4])
+            )}
+    else:
+        results = model.predict(source=image, conf=0.25, imgsz=608)
+        
+        for _, result in enumerate(results):
+            output_image_path = OUTPUT_DIR / f"{id}.png"
+            output_text_path = OUTPUT_DIR / f"{id}.txt"
+            
+            result.save(output_image_path)
+            
+            if result.masks is None:
+                with open(output_text_path, 'w') as f:
+                    pass
+                fracture = False
+            else:
+                result.save_txt(output_text_path)
+                fracture = True
+            
+            s3_img_url = upload_file_to_s3(output_image_path, "images")
+            s3_txt_url = upload_file_to_s3(output_text_path, "labels")
+            
+            insert_prediction_data(id, fracture, s3_img_url, s3_txt_url, result.tojson())
+
+        return {"results": PredictionResult(
+                id=id,
+                fractured=fracture,
+                img_file_path=s3_img_url,
+                img_labels_file_path=s3_txt_url,
+                object=result.tojson()
+            )}
