@@ -19,7 +19,7 @@ def upload_file_to_s3(file_path, subdirectory, bucket_name=AWS_S3_BUCKET_NAME):
     finally:
         file_path.unlink()
 
-def insert_prediction_data(id, fractured, img_file_path, img_labels_file_path, object_data):
+def insert_prediction(id, detect, segment, img_url):
     connection = None
     
     try:
@@ -31,20 +31,53 @@ def insert_prediction_data(id, fractured, img_file_path, img_labels_file_path, o
         )
         cursor = connection.cursor()
 
-        postgres_insert_query = """ 
-        INSERT INTO predictions (id, fractured, img_file_path, img_labels_file_path, object) 
-        VALUES (%s, %s, %s, %s, %s)
+        insert_prediction_query = """ 
+        INSERT INTO predictions (id, detect, segment, img_url) 
+        VALUES (%s, %s, %s, %s)
         """
-        
-        record_to_insert = (id, fractured, img_file_path, img_labels_file_path, object_data)
-        cursor.execute(postgres_insert_query, record_to_insert)
-
+        cursor.execute(insert_prediction_query, (id, detect, segment, img_url))
         connection.commit()
         count = cursor.rowcount
         print(count, "Record inserted successfully into predictions table")
-
     except (Exception, psycopg2.Error) as error:
         print("Failed to insert record into predictions table", error)
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+
+def insert_prediction_data(model, id, fractured, img_file_path, img_labels_file_path, object_data):
+    connection = None
+    
+    try:
+        connection = psycopg2.connect(
+            host=AWS_RDS_ENDPOINT,
+            database=AWS_RDS_DATABASE,
+            user=AWS_RDS_USER,
+            password=AWS_RDS_PASSWORD
+        )
+        cursor = connection.cursor()
+
+        if model == 'segment':
+            insert_query = """ 
+            INSERT INTO segment (fractured, img_file_path, img_labels_file_path, object, prediction_id) 
+            VALUES (%s, %s, %s, %s, %s)
+            """
+        elif model == 'detect':
+            insert_query = """ 
+            INSERT INTO detect (fractured, img_file_path, img_labels_file_path, object, prediction_id) 
+            VALUES (%s, %s, %s, %s, %s)
+            """
+        
+        record_to_insert = (fractured, img_file_path, img_labels_file_path, object_data, id)
+        cursor.execute(insert_query, record_to_insert)
+
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Record inserted successfully into", model, "table")
+
+    except (Exception, psycopg2.Error) as error:
+        print("Failed to insert record into", model, "table", error)
 
     finally:
         if connection:
@@ -62,7 +95,30 @@ def get_all_predictions(limit: int = 10, offset: int = 0):
         )
         cursor = connection.cursor()
 
-        select_query = "SELECT * FROM predictions ORDER BY id LIMIT %s OFFSET %s"
+        select_query = """
+            SELECT 
+                p.id, 
+                p.detect, 
+                p.segment, 
+                p.img_url, 
+                s.fractured AS segment_fractured,
+                s.img_file_path AS segment_img_file_path, 
+                s.img_labels_file_path AS segment_img_labels_file_path, 
+                s.object AS segment_object, 
+                d.fractured AS detect_fractured, 
+                d.img_file_path AS detect_img_file_path,
+                d.img_labels_file_path AS detect_img_labels_file_path, 
+                d.object AS detect_object 
+            FROM 
+                predictions p
+            LEFT JOIN 
+                segment s ON p.id = s.prediction_id
+            LEFT JOIN 
+                detect d ON p.id = d.prediction_id
+            ORDER BY p.id
+            LIMIT %s OFFSET %s
+        """
+        
         cursor.execute(select_query, (limit, offset))
         predictions = cursor.fetchall()
 
@@ -76,7 +132,7 @@ def get_all_predictions(limit: int = 10, offset: int = 0):
             cursor.close()
             connection.close()
             
-def get_prediction_by_id(prediction_id):
+def get_prediction_by_id(model, prediction_id):
     connection = None
     
     try:
@@ -88,7 +144,43 @@ def get_prediction_by_id(prediction_id):
         )
         cursor = connection.cursor()
 
-        select_by_id_query = "select * from predictions where id = %s"
+        if model == 'segment':
+            select_by_id_query = """
+                SELECT 
+                    p.id, 
+                    p.detect, 
+                    p.segment, 
+                    p.img_url, 
+                    s.fractured, 
+                    s.img_file_path, 
+                    s.img_labels_file_path, 
+                    s.object 
+                FROM 
+                    predictions p
+                LEFT JOIN 
+                    segment s ON p.id = s.prediction_id
+                WHERE 
+                    p.id = %s
+            """
+        elif model == 'detect':
+            select_by_id_query = """
+                SELECT 
+                    p.id, 
+                    p.detect, 
+                    p.segment, 
+                    p.img_url, 
+                    d.fractured, 
+                    d.img_file_path, 
+                    d.img_labels_file_path, 
+                    d.object 
+                FROM 
+                    predictions p
+                LEFT JOIN 
+                    detect d ON p.id = d.prediction_id
+                WHERE 
+                    p.id = %s
+            """
+            
         cursor.execute(select_by_id_query, (prediction_id,))
         prediction = cursor.fetchone()
 
@@ -97,6 +189,44 @@ def get_prediction_by_id(prediction_id):
     except (Exception, psycopg2.Error) as error:
         print("Failed to get prediction from predictions table", error)
 
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+            
+def update_prediction(id, model):
+    connection = None
+    
+    try:
+        connection = psycopg2.connect(
+            host=AWS_RDS_ENDPOINT,
+            database=AWS_RDS_DATABASE,
+            user=AWS_RDS_USER,
+            password=AWS_RDS_PASSWORD
+        )
+        cursor = connection.cursor()
+
+        if model == 'segment':
+            update_query = """
+                UPDATE predictions 
+                SET segment = TRUE 
+                WHERE id = %s
+            """
+        elif model == 'detect':
+            update_query = """
+                UPDATE predictions 
+                SET detect = TRUE 
+                WHERE id = %s
+            """
+        
+        cursor.execute(update_query, (id,))
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "Record updated successfully in predictions table")
+        
+    except (Exception, psycopg2.Error) as error:
+        print("Failed to update record in predictions table", error)
+        
     finally:
         if connection:
             cursor.close()
