@@ -4,7 +4,7 @@ from routes import detect, segment, predictions
 
 app = FastAPI(
     title="Fracture Vision API",
-    description="API for detecting and segmenting fractures using YOLO models.",
+    description="API for detecting and segmenting fractures using a pre-trained YOLO model.",
     version="1.0.0",
     contact={
         "name": "Leandro Luna",

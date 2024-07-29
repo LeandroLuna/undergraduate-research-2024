@@ -2,6 +2,7 @@ import psycopg2
 import boto3
 from botocore.exceptions import NoCredentialsError
 from utils.constants import AWS_RDS_ENDPOINT, AWS_RDS_DATABASE, AWS_RDS_USER, AWS_RDS_PASSWORD, AWS_S3_BUCKET_NAME
+from models.prediction import PredictionResult
 
 s3_client = boto3.client('s3')
 
@@ -10,12 +11,15 @@ def upload_file_to_s3(file_path, subdirectory, bucket_name=AWS_S3_BUCKET_NAME):
         s3_key = f"{subdirectory}/{file_path.name}"
         s3_client.upload_file(str(file_path), bucket_name, s3_key)
         return f"https://{bucket_name}.s3.amazonaws.com/{s3_key}"
+    
     except FileNotFoundError:
         print("The file was not found")
         return None
+    
     except NoCredentialsError:
         print("Credentials not available")
         return None
+    
     finally:
         file_path.unlink()
 
@@ -32,15 +36,19 @@ def insert_prediction(id, detect, segment, img_url):
         cursor = connection.cursor()
 
         insert_prediction_query = """ 
-        INSERT INTO predictions (id, detect, segment, img_url) 
-        VALUES (%s, %s, %s, %s)
+            INSERT INTO predictions (id, detect, segment, img_url) 
+            VALUES (%s, %s, %s, %s)
         """
+        
         cursor.execute(insert_prediction_query, (id, detect, segment, img_url))
         connection.commit()
+        
         count = cursor.rowcount
         print(count, "Record inserted successfully into predictions table")
+        
     except (Exception, psycopg2.Error) as error:
         print("Failed to insert record into predictions table", error)
+    
     finally:
         if connection:
             cursor.close()
@@ -60,13 +68,13 @@ def insert_prediction_data(model, id, fractured, img_file_path, img_labels_file_
 
         if model == 'segment':
             insert_query = """ 
-            INSERT INTO segment (fractured, img_file_path, img_labels_file_path, object, prediction_id) 
-            VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO segment (fractured, img_file_path, img_labels_file_path, object, prediction_id) 
+                VALUES (%s, %s, %s, %s, %s)
             """
         elif model == 'detect':
             insert_query = """ 
-            INSERT INTO detect (fractured, img_file_path, img_labels_file_path, object, prediction_id) 
-            VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO detect (fractured, img_file_path, img_labels_file_path, object, prediction_id) 
+                VALUES (%s, %s, %s, %s, %s)
             """
         
         record_to_insert = (fractured, img_file_path, img_labels_file_path, object_data, id)
@@ -86,6 +94,7 @@ def insert_prediction_data(model, id, fractured, img_file_path, img_labels_file_
 
 def get_all_predictions(limit: int = 10, offset: int = 0):
     connection = None
+
     try:
         connection = psycopg2.connect(
             host=AWS_RDS_ENDPOINT,
@@ -100,11 +109,13 @@ def get_all_predictions(limit: int = 10, offset: int = 0):
                 p.id, 
                 p.detect, 
                 p.segment, 
-                p.img_url, 
+                p.img_url,
+                s.id AS segment_id, 
                 s.fractured AS segment_fractured,
                 s.img_file_path AS segment_img_file_path, 
                 s.img_labels_file_path AS segment_img_labels_file_path, 
-                s.object AS segment_object, 
+                s.object AS segment_object,
+                d.id AS detect_id, 
                 d.fractured AS detect_fractured, 
                 d.img_file_path AS detect_img_file_path,
                 d.img_labels_file_path AS detect_img_labels_file_path, 
@@ -132,7 +143,7 @@ def get_all_predictions(limit: int = 10, offset: int = 0):
             cursor.close()
             connection.close()
             
-def get_prediction_by_id(model, prediction_id):
+def get_prediction_by_id(prediction_id, model=None):
     connection = None
     
     try:
@@ -178,6 +189,32 @@ def get_prediction_by_id(model, prediction_id):
                 LEFT JOIN 
                     detect d ON p.id = d.prediction_id
                 WHERE 
+                    p.id = %s
+            """
+        else:
+            select_by_id_query = """
+                SELECT 
+                    p.id, 
+                    p.detect, 
+                    p.segment, 
+                    p.img_url, 
+                    s.id AS segment_id, 
+                    s.fractured AS segment_fractured,
+                    s.img_file_path AS segment_img_file_path, 
+                    s.img_labels_file_path AS segment_img_labels_file_path, 
+                    s.object AS segment_object, 
+                    d.id AS detect_id,
+                    d.fractured AS detect_fractured, 
+                    d.img_file_path AS detect_img_file_path,
+                    d.img_labels_file_path AS detect_img_labels_file_path, 
+                    d.object AS detect_object 
+                FROM 
+                    predictions p
+                LEFT JOIN 
+                    segment s ON p.id = s.prediction_id
+                LEFT JOIN 
+                    detect d ON p.id = d.prediction_id
+                WHERE
                     p.id = %s
             """
             

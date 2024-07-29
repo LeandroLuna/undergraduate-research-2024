@@ -27,7 +27,7 @@ async def predict(file: UploadFile = File(...)):
     id = generate_id_from_image(image)
     
     db_info = get_prediction_by_id("detect", id)
-
+    
     if db_info is not None and db_info[1] == True:
         return {"results": PredictionResult(
                 id=id,
@@ -38,14 +38,14 @@ async def predict(file: UploadFile = File(...)):
             )}
     else:
         results = model.predict(source=image, conf=0.25, imgsz=608)
-        
+                
         if db_info is None:
             input_image_path = OUTPUT_DIR / f"{id}.{image.format.lower()}"
             image.save(input_image_path)
             s3_input_img_url = upload_file_to_s3(input_image_path, "input_images")
-        
+                    
             insert_prediction(id, True, False, s3_input_img_url)
-        else:
+        else:            
             update_prediction(id, "detect")
         
         for _, result in enumerate(results):
@@ -64,7 +64,7 @@ async def predict(file: UploadFile = File(...)):
             
             s3_img_url = upload_file_to_s3(output_image_path, "detect/images")
             s3_txt_url = upload_file_to_s3(output_text_path, "detect/labels")
-
+            
             insert_prediction_data("detect", id, fracture, s3_img_url, s3_txt_url, result.tojson())
 
         return {"results": PredictionResult(
