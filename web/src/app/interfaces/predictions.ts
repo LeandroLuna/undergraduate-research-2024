@@ -1,6 +1,6 @@
 
 interface Prediction {
-    id: int,
+    id: number,
     fractured: boolean,
     img_file_path: string,
     img_labels_file_path: string,
@@ -9,11 +9,11 @@ interface Prediction {
 
 interface Predictions {
     results: {
-        id: int,
+        id: number,
         img_url: string,
-        detect?: Prediction[],
-        segment?: Prediction[]
-    }
+        detect?: Prediction,
+        segment?: Prediction
+    }[];
 }
 
-export default Predictions, Prediction;
+export { Predictions, Prediction };

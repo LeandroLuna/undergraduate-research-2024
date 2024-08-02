@@ -8,7 +8,7 @@ import { Predictions } from '../../interfaces/predictions';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  predictions: Predictions;
+  predictions!: Predictions;
 
   constructor(private dataService: DataService) { }
 
@@ -16,7 +16,6 @@ export class HomeComponent implements OnInit {
     this.dataService.getAllPredictions().subscribe({
       next: (data: Predictions) => {
         this.predictions = data;
-        console.log(this.predictions);
       },
       error: (error) => {
         console.error(error);
