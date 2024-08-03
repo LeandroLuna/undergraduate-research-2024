@@ -1,0 +1,16 @@
+:host ::ng-deep .p-toolbar {
+    background-color: #f5f5f5;
+    color: #333;
+    text-align: center;
+    padding: 10px;
+}
+  
+:host ::ng-deep a {
+margin: 0 10px;
+color: #007ad9;
+text-decoration: none;
+}
+
+:host ::ng-deep a:hover {
+text-decoration: underline;
+}

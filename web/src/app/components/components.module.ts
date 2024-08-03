@@ -1,12 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-
+import { PanelComponent } from './panel/panel.component';
+import { TabViewModule } from 'primeng/tabview';
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    PanelComponent
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+    TabViewModule,
+    DividerModule
+  ],
+  exports: [
+    PanelComponent
   ]
 })
 export class ComponentsModule { }
