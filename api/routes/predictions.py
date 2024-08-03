@@ -19,14 +19,14 @@ async def all():
             PredictionsResponse(
                 id=prediction[0],
                 img_url=prediction[3],
-                detect=PredictionResult(
+                segment=PredictionResult(
                     id=prediction[4],
                     fractured=prediction[5],
                     img_file_path=prediction[6],
                     img_labels_file_path=prediction[7],
                     object=str(prediction[8])
                 ),
-                segment=PredictionResult(
+                detect=PredictionResult(
                     id=prediction[9],
                     fractured=prediction[10],
                     img_file_path=prediction[11],
@@ -47,14 +47,14 @@ async def getById(id: int):
     return PredictionsResponse(
         id=prediction[0],
         img_url=prediction[3],
-        detect=PredictionResult(
+        segment=PredictionResult(
             id=prediction[4],
             fractured=prediction[5],
             img_file_path=prediction[6],
             img_labels_file_path=prediction[7],
             object=str(prediction[8])
         ),
-        segment=PredictionResult(
+        detect=PredictionResult(
             id=prediction[9],
             fractured=prediction[10],
             img_file_path=prediction[11],
