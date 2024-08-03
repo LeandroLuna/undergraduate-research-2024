@@ -1,8 +1,37 @@
-<p-tabView>
-    <p-tabPanel *ngFor="let tab of tabs" [header]="tab">
-        <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum rem.
-        </p>
-    </p-tabPanel>
-</p-tabView>
-<p-divider/>
+<div class="panel-container">
+    <p>ID: {{ prediction.id }}</p>
+    <p-tabView>
+        <p-tabPanel *ngFor="let tab of tabs" [header]="tab" [disabled]="isTabDisabled(tab)">
+            <ng-container [ngSwitch]="tab">
+                <p *ngSwitchCase="'original'">
+                    <p-image 
+                        [src]="prediction.img_url" 
+                        [alt]="'Imagem da tab ' + tab + ' do ID ' + prediction.id" 
+                        width="350">
+                    </p-image>
+                </p>
+                <ng-container *ngSwitchCase="'detecção'">
+                    <ng-container *ngIf="prediction.detect">
+                        <p-image 
+                            [src]="prediction.detect.img_file_path" 
+                            [alt]="'Imagem da tab ' + tab + ' do ID ' + prediction.id" 
+                            width="350">
+                        </p-image>
+                        <p>Fratura detectada? {{ prediction.detect.fractured ? 'Sim' : 'Não' }}</p>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'segmentação'">
+                    <ng-container *ngIf="prediction.segment">
+                        <p-image 
+                            [src]="prediction.segment.img_file_path" 
+                            [alt]="'Imagem da tab ' + tab + ' do ID ' + prediction.id" 
+                            width="350">
+                        </p-image>
+                        <p>Fratura detectada? {{ prediction.segment.fractured ? 'Sim' : 'Não' }}</p>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </p-tabPanel>
+    </p-tabView>
+    <p-divider type="dashed"></p-divider>
+</div>

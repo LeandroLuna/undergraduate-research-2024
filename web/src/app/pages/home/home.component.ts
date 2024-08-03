@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { Predictions } from '../../interfaces/predictions';
+import { PredictionsList } from '../../interfaces/predictions';
 
 @Component({
   selector: 'app-home',
@@ -8,13 +8,13 @@ import { Predictions } from '../../interfaces/predictions';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  predictions!: Predictions;
+  predictions!: PredictionsList;
 
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
     this.dataService.getAllPredictions().subscribe({
-      next: (data: Predictions) => {
+      next: (data: PredictionsList) => {
         this.predictions = data;
       },
       error: (error) => {

@@ -8,6 +8,13 @@ interface Prediction {
 }
 
 interface Predictions {
+    id: number,
+    img_url: string,
+    detect?: Prediction,
+    segment?: Prediction
+}
+
+interface PredictionsList {
     results: {
         id: number,
         img_url: string,
@@ -16,4 +23,4 @@ interface Predictions {
     }[];
 }
 
-export { Predictions, Prediction };
+export { Predictions, Prediction, PredictionsList };

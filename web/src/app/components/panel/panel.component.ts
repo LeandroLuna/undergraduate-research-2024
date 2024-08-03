@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Predictions } from '../../interfaces/predictions';
 
 @Component({
   selector: 'app-panel',
@@ -6,5 +7,18 @@ import { Component } from '@angular/core';
   styleUrl: './panel.component.scss'
 })
 export class PanelComponent {
-  tabs = ["original", "detect", "segment"]
+  tabs = ["original", "detecção", "segmentação"];
+  @Input() prediction!: Predictions; 
+
+  constructor() {}
+
+  isTabDisabled(tab: string): boolean {
+    if (tab === 'detecção') {
+      return !this.prediction.detect;
+    }
+    if (tab === 'segmentação') {
+      return !this.prediction.segment;
+    }
+    return false;
+  }
 }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Predictions } from '../interfaces/predictions';
+import { PredictionsList } from '../interfaces/predictions';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  getAllPredictions(): Observable<Predictions> {
-    return this.http.get<Predictions>(`${this._BASE_URL}/predictions/all`);
+  getAllPredictions(): Observable<PredictionsList> {
+    return this.http.get<PredictionsList>(`${this._BASE_URL}/predictions/all`);
   }
 }
