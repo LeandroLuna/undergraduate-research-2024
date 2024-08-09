@@ -11,7 +11,7 @@
                     </p-image>
                 </p>
                 <ng-container *ngSwitchCase="'detecção'">
-                    <ng-container *ngIf="prediction.detect">
+                    <ng-container *ngIf="prediction.detect && prediction.detect.id">
                         <p-image 
                             [src]="prediction.detect.img_file_path" 
                             [alt]="'Imagem da tab ' + tab + ' do ID ' + prediction.id" 
@@ -21,7 +21,7 @@
                     </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="'segmentação'">
-                    <ng-container *ngIf="prediction.segment">
+                    <ng-container *ngIf="prediction.segment && prediction.segment.id">
                         <p-image 
                             [src]="prediction.segment.img_file_path" 
                             [alt]="'Imagem da tab ' + tab + ' do ID ' + prediction.id" 

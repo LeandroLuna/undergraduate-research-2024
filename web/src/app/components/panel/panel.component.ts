@@ -13,11 +13,11 @@ export class PanelComponent {
   constructor() {}
 
   isTabDisabled(tab: string): boolean {
-    if (tab === 'detecção') {
-      return !this.prediction.detect;
+    if (tab === 'detecção' && this.prediction.detect) { 
+      return this.prediction.detect.id === null;
     }
-    if (tab === 'segmentação') {
-      return !this.prediction.segment;
+    if (tab === 'segmentação' && this.prediction.segment) {
+      return this.prediction.segment.id === null;
     }
     return false;
   }
