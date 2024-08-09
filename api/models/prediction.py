@@ -2,10 +2,10 @@ from typing import Optional
 from pydantic import BaseModel
 
 class PredictionResult(BaseModel):
-    id: int
-    fractured: bool
-    img_file_path: str
-    img_labels_file_path: str
+    id: Optional[int] = None
+    fractured: Optional[bool] = None
+    img_file_path: Optional[str] = None
+    img_labels_file_path: Optional[str] = None
     object: Optional[str] = None
 
 class PredictionResponse(BaseModel):

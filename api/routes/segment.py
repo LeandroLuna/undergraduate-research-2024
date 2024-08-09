@@ -25,7 +25,7 @@ async def predict(file: UploadFile = File(...)):
     image = Image.open(io.BytesIO(image_data))
     id = generate_id_from_image(image)
     
-    db_info = get_prediction_by_id("segment", id)
+    db_info = get_prediction_by_id(id, "segment")
 
     if db_info is not None and db_info[2] == True:
         return {"results": PredictionResult(
@@ -36,7 +36,7 @@ async def predict(file: UploadFile = File(...)):
                 object=str(db_info[7])
             )}
     else:
-        results = model.predict(source=image, conf=0.25, imgsz=608)
+        results = model.predict(source=image, conf=0.25, imgsz=608, show_boxes=False, show_labels=True)
         
         if db_info is None:
             input_image_path = OUTPUT_DIR / f"{id}.{image.format.lower()}"

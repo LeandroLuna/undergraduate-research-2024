@@ -26,7 +26,7 @@ async def predict(file: UploadFile = File(...)):
     image = Image.open(io.BytesIO(image_data))
     id = generate_id_from_image(image)
     
-    db_info = get_prediction_by_id("detect", id)
+    db_info = get_prediction_by_id(id, "detect")
     
     if db_info is not None and db_info[1] == True:
         return {"results": PredictionResult(
