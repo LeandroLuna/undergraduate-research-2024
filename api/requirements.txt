@@ -6,3 +6,5 @@ boto3
 sqlalchemy 
 psycopg2-binary 
 Pillow
+python-multipart
+email-validator

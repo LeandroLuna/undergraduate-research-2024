@@ -1,10 +1,14 @@
 import psycopg2
 import boto3
 from botocore.exceptions import NoCredentialsError
-from utils.constants import AWS_RDS_ENDPOINT, AWS_RDS_DATABASE, AWS_RDS_USER, AWS_RDS_PASSWORD, AWS_S3_BUCKET_NAME
+from utils.constants import AWS_RDS_ENDPOINT, AWS_RDS_DATABASE, AWS_RDS_USER, AWS_RDS_PASSWORD, AWS_S3_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
 from models.prediction import PredictionResult
 
-s3_client = boto3.client('s3')
+s3_client = boto3.client(
+    's3',
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+)
 
 def upload_file_to_s3(file_path, subdirectory, bucket_name=AWS_S3_BUCKET_NAME):
     try:

@@ -17,3 +17,5 @@ AWS_RDS_ENDPOINT = 'fracture-vision.cf8kgc6ouppm.us-east-1.rds.amazonaws.com'
 AWS_RDS_DATABASE = 'images-recognition'
 AWS_RDS_USER = os.getenv('RDS_USER')
 AWS_RDS_PASSWORD = os.getenv('RDS_PASSWORD')
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
