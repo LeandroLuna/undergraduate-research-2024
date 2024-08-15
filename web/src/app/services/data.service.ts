@@ -11,7 +11,7 @@ export class DataService {
   private _BASE_URL = environment.baseUrl;
 
   constructor(private http: HttpClient) { 
-    console.log(_BASE_URL);
+    console.log(this._BASE_URL);
   }
 
   getAllPredictions(): Observable<PredictionsList> {
