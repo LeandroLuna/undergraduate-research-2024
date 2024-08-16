@@ -118,3 +118,7 @@ Navigate to `http://localhost:8000` in your browser.
 ## Endpoints
 
 To view the available endpoints, navigate to `http://localhost:8000/docs` in your browser.
+
+## Deploy
+
+URL: http://fracture-vision-api-homo.us-east-1.elasticbeanstalk.com/
