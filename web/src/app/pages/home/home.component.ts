@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
     this.dataService.getAllPredictions().subscribe({
       next: (data: PredictionsList) => {
         this.predictions = data;
+        console.log(this.predictions);
       },
       error: (error) => {
         console.error(error);
