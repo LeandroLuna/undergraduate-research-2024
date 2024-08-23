@@ -21,3 +21,7 @@ The application connects to an API for fracture detection and visualization of a
 ## Build and deploy
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+
+### Deploy 
+
+URL: https://main.d3ebmnntodnfa9.amplifyapp.com/
