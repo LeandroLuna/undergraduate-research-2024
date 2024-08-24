@@ -1,8 +1,10 @@
 <p-menubar>
     <ng-template pTemplate="start">
-      <img src="public/logo.png" height="40" alt="logo">
+      <a routerLink="/">
+        <img src="logo.png" height="40" alt="logo">
+      </a>
     </ng-template>
-    <!-- <ng-template pTemplate="end">
-      <button pButton label="Login">Login<i class="pi pi-user" style="font-size: 1rem; padding-left: 0.5rem"></i></button>
-    </ng-template> -->
+    <ng-template pTemplate="end">
+      <a routerLink="/predict">Predição</a>
+    </ng-template>
 </p-menubar>

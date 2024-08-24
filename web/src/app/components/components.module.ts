@@ -4,6 +4,8 @@ import { PanelComponent } from './panel/panel.component';
 import { TabViewModule } from 'primeng/tabview';
 import { DividerModule } from 'primeng/divider';
 import { ImageModule } from 'primeng/image';
+import { FileUploadModule } from 'primeng/fileupload';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,10 @@ import { ImageModule } from 'primeng/image';
     ImageModule
   ],
   exports: [
-    PanelComponent
+    PanelComponent,
+    ImageModule,
+    FileUploadModule,
+    RadioButtonModule
   ]
 })
 export class ComponentsModule { }
