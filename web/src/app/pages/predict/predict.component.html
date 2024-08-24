@@ -31,11 +31,15 @@
       </p-radioButton>
       <label for="detect">Detecção</label>
     </div>
-    <button pButton type="submit" label="Predizer fraturas" [disabled]="!imageFile || !selectedModel"></button>
+    <button pButton type="submit" label="Predizer fraturas" [disabled]="!imageFile || !selectedModel || loading"></button>
   </div>
 </form>
 
-<div *ngIf="prediction !== undefined" class="p-mt-3">
+<div *ngIf="loading" class="p-mt-3">
+  <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+</div>
+
+<div *ngIf="!loading || prediction !== undefined" class="p-mt-3">
   <h1>Resultado da predição de ID '{{prediction.id}}'</h1>
   <p-image 
     [src]="prediction.img_file_path"
