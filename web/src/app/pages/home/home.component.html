@@ -2,6 +2,12 @@
     <div *ngFor="let prediction of predictions.results">
         <app-panel [prediction]="prediction"></app-panel>
     </div>
+    <p-paginator 
+        [rows]="limit" 
+        [totalRecords]="totalRecords ? totalRecords : 0"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        (onPageChange)="paginate($event)">
+    </p-paginator>
 </div>
 
 <ng-template #loading>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { Prediction } from '../../interfaces/predictions';
+import { Prediction, PredictionModel } from '../../interfaces/predictions';
 
 @Component({
   selector: 'app-predict',
@@ -10,7 +10,7 @@ import { Prediction } from '../../interfaces/predictions';
 export class PredictComponent {
   imageFile: File | null = null;
   selectedModel: string = '';
-  prediction!: Prediction;
+  prediction!: PredictionModel;
 
   constructor(private dataService: DataService){}
 
@@ -24,8 +24,7 @@ export class PredictComponent {
     if (this.imageFile && this.selectedModel) {
       this.dataService.predictFracturesOnImage(this.imageFile, this.selectedModel).subscribe({
         next: (data: Prediction) => {
-          // this.prediction = data;
-          console.log('Predição', data);
+          this.prediction = data.results;
         },
         error: (error) => {
           console.error(error)

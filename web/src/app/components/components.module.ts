@@ -6,6 +6,8 @@ import { DividerModule } from 'primeng/divider';
 import { ImageModule } from 'primeng/image';
 import { FileUploadModule } from 'primeng/fileupload';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { PaginatorModule } from 'primeng/paginator';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     PanelComponent,
     ImageModule,
     FileUploadModule,
-    RadioButtonModule
+    RadioButtonModule,
+    ProgressSpinnerModule,
+    PaginatorModule
   ]
 })
 export class ComponentsModule { }

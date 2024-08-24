@@ -9,18 +9,29 @@ import { PredictionsList } from '../../interfaces/predictions';
 })
 export class HomeComponent implements OnInit {
   predictions!: PredictionsList;
+  limit: number = 10;
+  offset: number = 0; 
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.dataService.getAllPredictions().subscribe({
+    this.loadPredictions();
+  }
+
+  loadPredictions() {
+    this.dataService.getAllPredictions(this.limit, this.offset).subscribe({
       next: (data: PredictionsList) => {
         this.predictions = data;
-        console.log('Lista de predições', this.predictions);
       },
       error: (error) => {
         console.error(error);
       }
-    })
+    });
+  }
+
+  paginate(event: any) {
+    this.limit = event.rows; 
+    this.offset = event.first;
+    this.loadPredictions();
   }
 }

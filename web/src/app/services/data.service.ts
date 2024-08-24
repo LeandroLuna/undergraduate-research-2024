@@ -9,10 +9,16 @@ import { environment } from '../../environments/environment';
 })
 export class DataService {
   private _BASE_URL = environment.baseUrl;
+  
   constructor(private http: HttpClient) { }
 
-  getAllPredictions(): Observable<PredictionsList> {
-    return this.http.get<PredictionsList>(`${this._BASE_URL}/v1/predictions/all`);
+  getAllPredictions(limit: number = 10, offset: number = 0): Observable<PredictionsList> {
+    return this.http.get<PredictionsList>(`${this._BASE_URL}/v1/predictions/all`, {
+      params: {
+        limit: limit.toString(),
+        offset: offset.toString()
+      }
+    });
   }
 
   getPredictionById(id: number): Observable<Prediction> {
