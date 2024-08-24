@@ -4,8 +4,8 @@
     </div>
     <p-paginator 
         [rows]="limit" 
-        [totalRecords]="0"
-        [rowsPerPageOptions]="[5, 10, 20]"
+        [totalRecords]="totalRecords"
+        [rowsPerPageOptions]="[5, 10]"
         (onPageChange)="paginate($event)">
     </p-paginator>
 </div>

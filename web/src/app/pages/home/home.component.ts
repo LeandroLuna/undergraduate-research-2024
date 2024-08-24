@@ -11,17 +11,30 @@ export class HomeComponent implements OnInit {
   predictions!: PredictionsList;
   limit: number = 10;
   offset: number = 0; 
+  totalRecords: number = 0;
 
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
     this.loadPredictions();
+    this.loadTotalRecords();
   }
 
   loadPredictions() {
     this.dataService.getAllPredictions(this.limit, this.offset).subscribe({
       next: (data: PredictionsList) => {
         this.predictions = data;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
+  loadTotalRecords() {
+    this.dataService.getTotalRecords().subscribe({
+      next: (data) => {
+        this.totalRecords = data.total_records;
       },
       error: (error) => {
         console.error(error);

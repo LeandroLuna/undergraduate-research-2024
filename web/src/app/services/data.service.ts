@@ -21,6 +21,10 @@ export class DataService {
     });
   }
 
+  getTotalRecords(): Observable<{ total_records: number }> {
+    return this.http.get<{ total_records: number }>(`${this._BASE_URL}/v1/predictions/total`);
+  }
+
   getPredictionById(id: number): Observable<Prediction> {
     return this.http.get<Prediction>(`${this._BASE_URL}/v1/predictions/${id}`);
   }
