@@ -2,14 +2,14 @@ import json
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 
-from utils.aws_helpers import get_all_predictions, get_prediction_by_id
-from models.prediction import PredictionsResponseList, PredictionsResponse, PredictionResult
+from utils.aws_helpers import get_all_predictions, get_prediction_by_id, get_total_predictions
+from models.prediction import PredictionsResponseList, PredictionsResponse, PredictionResult, TotalRecordsResponse
 
 router = APIRouter()
 
 @router.get("/all", response_model=PredictionsResponseList, summary="Predicted fractures in all image", response_description="An object containing the detection and segmentation prediction results")
-async def all(limit: int = Query(10, ge=1), offset: int = Query(0, ge=0)):
-    predictions = get_all_predictions(limit, offset)
+async def getAll(limit: int = Query(10, ge=1), offset: int = Query(0, ge=0)):
+    predictions, total_records = get_all_predictions(limit, offset)
         
     if not predictions:
         raise HTTPException(status_code=404, detail="No predictions found")
@@ -62,3 +62,12 @@ async def getById(id: int):
             object=str(prediction[13])
         )
     )
+    
+@router.get("/total", response_model=TotalRecordsResponse, summary="Get total number of predictions", response_description="Total number of predictions in the database")
+async def getTotalPredictions():
+    total_records = get_total_predictions()
+    
+    if total_records is None:
+        raise HTTPException(status_code=500, detail="Failed to retrieve total predictions count")
+    
+    return TotalRecordsResponse(total_records=total_records)

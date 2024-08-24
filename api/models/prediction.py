@@ -19,3 +19,6 @@ class PredictionsResponse(BaseModel):
 
 class PredictionsResponseList(BaseModel):
     results: list[PredictionsResponse]
+    
+class TotalRecordsResponse(BaseModel):
+    total_records: int

@@ -133,14 +133,45 @@ def get_all_predictions(limit: int = 10, offset: int = 0):
             ORDER BY p.id
             LIMIT %s OFFSET %s
         """
-        
         cursor.execute(select_query, (limit, offset))
         predictions = cursor.fetchall()
 
-        return predictions
+        return predictions, total_records
 
     except (Exception, psycopg2.Error) as error:
         print("Failed to get predictions from predictions table", error)
+
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+
+def get_total_predictions():
+    connection = None
+
+    try:
+        connection = psycopg2.connect(
+            host=AWS_RDS_ENDPOINT,
+            database=AWS_RDS_DATABASE,
+            user=AWS_RDS_USER,
+            password=AWS_RDS_PASSWORD
+        )
+        cursor = connection.cursor()
+
+        count_query = """
+            SELECT COUNT(*)
+            FROM predictions p
+            LEFT JOIN segment s ON p.id = s.prediction_id
+            LEFT JOIN detect d ON p.id = d.prediction_id
+        """
+        cursor.execute(count_query)
+        total_records = cursor.fetchone()[0]
+
+        return total_records
+
+    except (Exception, psycopg2.Error) as error:
+        print("Failed to get total predictions count", error)
+        return 0
 
     finally:
         if connection:
