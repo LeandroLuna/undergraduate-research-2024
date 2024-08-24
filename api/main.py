@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 from routes import detect, segment, predictions
 
 app = FastAPI(
@@ -11,6 +12,14 @@ app = FastAPI(
         "url": "https://www.linkedin.com/in/luna-leandro/",
         "email": "leandro.j.luna@gmail.com"
     }
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://main.d3ebmnntodnfa9.amplifyapp.com", "http://localhost:4200"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(detect.router, prefix="/v1/detect", tags=["Detections"])
