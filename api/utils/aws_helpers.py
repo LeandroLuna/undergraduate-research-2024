@@ -136,7 +136,7 @@ def get_all_predictions(limit: int = 10, offset: int = 0):
         cursor.execute(select_query, (limit, offset))
         predictions = cursor.fetchall()
 
-        return predictions, total_records
+        return predictions
 
     except (Exception, psycopg2.Error) as error:
         print("Failed to get predictions from predictions table", error)

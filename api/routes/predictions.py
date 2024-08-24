@@ -9,7 +9,7 @@ router = APIRouter()
 
 @router.get("/all", response_model=PredictionsResponseList, summary="Predicted fractures in all image", response_description="An object containing the detection and segmentation prediction results")
 async def getAll(limit: int = Query(10, ge=1), offset: int = Query(0, ge=0)):
-    predictions, total_records = get_all_predictions(limit, offset)
+    predictions = get_all_predictions(limit, offset)
         
     if not predictions:
         raise HTTPException(status_code=404, detail="No predictions found")
