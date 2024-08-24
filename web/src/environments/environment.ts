@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    baseUrl: 'http://homo.us-east-1.elasticbeanstalk.com'
+    baseUrl: 'https://cors-anywhere.herokuapp.com/http://homo.us-east-1.elasticbeanstalk.com'
 };

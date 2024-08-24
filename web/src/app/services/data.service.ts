@@ -9,7 +9,6 @@ import { environment } from '../../environments/environment';
 })
 export class DataService {
   private _BASE_URL = environment.baseUrl;
-
   constructor(private http: HttpClient) { }
 
   getAllPredictions(): Observable<PredictionsList> {
