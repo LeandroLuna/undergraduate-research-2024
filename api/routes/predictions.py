@@ -36,6 +36,15 @@ async def getAll(limit: int = Query(10, ge=1), offset: int = Query(0, ge=0)):
             ) for prediction in predictions
         ]
     )
+
+@router.get("/total", response_model=TotalRecordsResponse, summary="Get total number of predictions", response_description="Total number of predictions in the database")
+async def getTotalPredictions():
+    total_records = get_total_predictions()
+    
+    if total_records is None:
+        raise HTTPException(status_code=500, detail="Failed to retrieve total predictions count")
+    
+    return TotalRecordsResponse(total_records=total_records)
     
 @router.get("/{id}", response_model=PredictionsResponse, summary="Predicted fractures in a specific image", response_description="An object containing the detection and segmentation prediction results for a specific id")
 async def getById(id: int):
@@ -62,12 +71,3 @@ async def getById(id: int):
             object=str(prediction[13])
         )
     )
-    
-@router.get("/total", response_model=TotalRecordsResponse, summary="Get total number of predictions", response_description="Total number of predictions in the database")
-async def getTotalPredictions():
-    total_records = get_total_predictions()
-    
-    if total_records is None:
-        raise HTTPException(status_code=500, detail="Failed to retrieve total predictions count")
-    
-    return TotalRecordsResponse(total_records=total_records)
