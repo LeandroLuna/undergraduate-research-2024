@@ -1,55 +1,58 @@
-<div class="container p-fluid">
-  <form (ngSubmit)="onSubmit()" #predictionForm="ngForm">
-    <div>
-      <div class="p-field">
-        <label for="image">Selecione ou capture a radiografia:</label>
-        <p-fileUpload 
-          name="image" 
-          url="#" 
-          chooseLabel="Selecionar Imagem" 
-          (onSelect)="onFileSelected($event)" 
-          accept="image/*" 
-          mode="basic"
-          auto
-          [customUpload]="true">
-        </p-fileUpload>
+<div class="container">
+  <div class="p-fluid">
+    <form (ngSubmit)="onSubmit()" #predictionForm="ngForm">
+      <div>
+        <div class="p-field">
+          <label for="image">Selecione ou capture a radiografia:</label>
+          <p-fileUpload 
+            name="image" 
+            url="#" 
+            class="mt-1"
+            chooseLabel="Selecionar Imagem" 
+            (onSelect)="onFileSelected($event)" 
+            accept="image/*" 
+            mode="basic"
+            auto
+            [customUpload]="true">
+          </p-fileUpload>
+        </div>
+        <div class="p-field-radiobutton">
+          <p-radioButton 
+            name="model" 
+            value="segment" 
+            [(ngModel)]="selectedModel" 
+            inputId="segment">
+          </p-radioButton>
+          <label for="segment">Segmentação</label>
+        </div>
+        <div class="p-field-radiobutton">
+          <p-radioButton 
+            name="model" 
+            value="detect" 
+            [(ngModel)]="selectedModel" 
+            inputId="detect">
+          </p-radioButton>
+          <label for="detect">Detecção</label>
+        </div>
+        <button pButton type="submit" label="Predizer fraturas" class="mt-1" [disabled]="!imageFile || !selectedModel || loading"></button>
       </div>
-      <div class="p-field-radiobutton">
-        <p-radioButton 
-          name="model" 
-          value="segment" 
-          [(ngModel)]="selectedModel" 
-          inputId="segment">
-        </p-radioButton>
-        <label for="segment">Segmentação</label>
-      </div>
-      <div class="p-field-radiobutton">
-        <p-radioButton 
-          name="model" 
-          value="detect" 
-          [(ngModel)]="selectedModel" 
-          inputId="detect">
-        </p-radioButton>
-        <label for="detect">Detecção</label>
-      </div>
-      <button pButton type="submit" label="Predizer fraturas" [disabled]="!imageFile || !selectedModel || loading"></button>
-    </div>
-  </form>
-  
-  <div class="c-result">
-    <div *ngIf="loading" class="mt-3">
-      <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
-    </div>
+    </form>
     
-    <div *ngIf="!loading && prediction !== undefined" class="mt-3">
-      <h1>Resultado da predição de ID '{{prediction.id}}'</h1>
-      <p-image 
-        [src]="prediction.img_file_path"
-        [alt]="'Imagem do modelo ' + selectedModel + ' do ID ' + prediction.id" 
-        width="350" 
-        class="mb-3">
-      </p-image>
-      <p>Fratura detectada? {{ prediction.fractured ? 'Sim' : 'Não' }}</p>
+    <div class="c-result">
+      <div *ngIf="loading" class="mt-3">
+        <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+      </div>
+      
+      <div *ngIf="!loading && prediction !== undefined" class="mt-3">
+        <h1>Resultado da predição de ID '{{prediction.id}}'</h1>
+        <p-image 
+          [src]="prediction.img_file_path"
+          [alt]="'Imagem do modelo ' + selectedModel + ' do ID ' + prediction.id" 
+          width="350" 
+          class="mb-3">
+        </p-image>
+        <p>Fratura detectada? {{ prediction.fractured ? 'Sim' : 'Não' }}</p>
+      </div>
     </div>
   </div>
 </div>

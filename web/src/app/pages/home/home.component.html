@@ -1,17 +1,19 @@
 <div class="container">
-    <div *ngIf="predictions !== undefined; else loading">
-        <div *ngFor="let prediction of predictions.results">
-            <app-panel [prediction]="prediction"></app-panel>
+    <div class="p-fluid">
+        <div *ngIf="predictions !== undefined; else loading">
+            <div *ngFor="let prediction of predictions.results">
+                <app-panel [prediction]="prediction"></app-panel>
+            </div>
+            <p-paginator 
+                [rows]="limit" 
+                [totalRecords]="totalRecords"
+                [rowsPerPageOptions]="[5, 10]"
+                (onPageChange)="paginate($event)">
+            </p-paginator>
         </div>
-        <p-paginator 
-            [rows]="limit" 
-            [totalRecords]="totalRecords"
-            [rowsPerPageOptions]="[5, 10]"
-            (onPageChange)="paginate($event)">
-        </p-paginator>
+        
+        <ng-template #loading>
+            <p-progressSpinner ariaLabel="loading" />
+        </ng-template>
     </div>
-    
-    <ng-template #loading>
-        <p-progressSpinner ariaLabel="loading" />
-    </ng-template>
 </div>

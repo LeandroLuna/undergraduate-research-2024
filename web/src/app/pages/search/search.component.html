@@ -1,26 +1,28 @@
-<div class="container p-fluid mt-1">
-    <div>
-        <div class="p-field my-1">
-          <label for="searchId">ID da Predição:</label>
-          <input id="searchId" type="number" pInputText [(ngModel)]="searchId" min="0" placeholder="Digite o ID da predição" />
+<div class="container mt-1">
+    <div class="p-fluid">
+        <div>
+            <div class="p-field my-1">
+              <label for="searchId">ID da Predição:</label>
+              <input id="searchId" type="number" pInputText [(ngModel)]="searchId" min="0" class="ml-1" placeholder="Digite o ID da predição" />
+            </div>
+            <button pButton type="button" label="Pesquisar" icon="pi pi-search" (click)="onSearch()" [disabled]="searchId === null || searchId < 1"></button>
         </div>
-        <button pButton type="button" label="Pesquisar" icon="pi pi-search" (click)="onSearch()" [disabled]="searchId === null || searchId < 1"></button>
+          
+        <div *ngIf="loading" class="mt-3">
+            <p-progressSpinner ariaLabel="Carregando"></p-progressSpinner>
+        </div>
+        
+        <div *ngIf="prediction && !loading" class="mt-3">
+            <h2>Resultado da Predição</h2>
+            <app-panel [prediction]="prediction"/>
+        </div>
+        
+        <div *ngIf="error && !loading" class="mt-3">
+            <p-messages severity="error">
+                <ng-template pTemplate>
+                    <div >{{error}}</div>
+                </ng-template>
+            </p-messages>
+        </div>  
     </div>
-      
-    <div *ngIf="loading" class="mt-3">
-        <p-progressSpinner ariaLabel="Carregando"></p-progressSpinner>
-    </div>
-    
-    <div *ngIf="prediction && !loading" class="mt-3">
-        <h2>Resultado da Predição</h2>
-        <app-panel [prediction]="prediction"/>
-    </div>
-    
-    <div *ngIf="error && !loading" class="mt-3">
-        <p-messages severity="error">
-            <ng-template pTemplate>
-                <div >{{error}}</div>
-            </ng-template>
-        </p-messages>
-    </div>    
 </div>

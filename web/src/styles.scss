@@ -32,6 +32,10 @@ router-outlet {
     margin-bottom: 20px;
 }
 
+.ml-1{
+    margin-left: 10px;
+}
+
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
