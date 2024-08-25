@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Prediction, PredictionModel } from '../../interfaces/predictions';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-predict',
@@ -13,11 +14,13 @@ export class PredictComponent {
   prediction!: PredictionModel;
   loading: boolean = false; 
 
-  constructor(private dataService: DataService){}
+  constructor(private dataService: DataService, private messageService: MessageService){}
 
   onFileSelected(event: any): void {
     if (event.files && event.files.length > 0) {
       this.imageFile = event.files[0];
+
+      this.messageService.add({severity: 'success', summary: 'Imagem selecionada.', detail: this.imageFile!.name});
     }
   }
 

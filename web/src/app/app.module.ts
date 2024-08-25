@@ -10,6 +10,8 @@ import { ComponentsModule } from './components/components.module';
 import { LayoutsModule } from './layouts/layouts.module';
 import { PagesModule } from './pages/pages.module';
 
+import { MessageService } from 'primeng/api';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -26,7 +28,8 @@ import { PagesModule } from './pages/pages.module';
   ],
   providers: [
     provideClientHydration(),
-    provideHttpClient(withFetch())
+    provideHttpClient(withFetch()),
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

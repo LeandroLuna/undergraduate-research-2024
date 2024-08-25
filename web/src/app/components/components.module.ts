@@ -8,6 +8,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PaginatorModule } from 'primeng/paginator';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { PaginatorModule } from 'primeng/paginator';
     FileUploadModule,
     RadioButtonModule,
     ProgressSpinnerModule,
-    PaginatorModule
+    PaginatorModule,
+    ToastModule
   ]
 })
 export class ComponentsModule { }
