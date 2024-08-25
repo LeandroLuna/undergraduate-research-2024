@@ -7,16 +7,16 @@
         <button pButton type="button" label="Pesquisar" icon="pi pi-search" (click)="onSearch()" [disabled]="searchId === null || searchId < 1"></button>
     </div>
       
-    <div *ngIf="loading" class="p-mt-3">
+    <div *ngIf="loading" class="mt-3">
         <p-progressSpinner ariaLabel="Carregando"></p-progressSpinner>
     </div>
     
-    <div *ngIf="prediction && !loading" class="p-mt-3">
+    <div *ngIf="prediction && !loading" class="mt-3">
         <h2>Resultado da Predição</h2>
         <app-panel [prediction]="prediction"/>
     </div>
     
-    <div *ngIf="error && !loading" class="p-mt-3">
+    <div *ngIf="error && !loading" class="mt-3">
         <p-messages severity="error">
             <ng-template pTemplate>
                 <div >{{error}}</div>

@@ -37,17 +37,17 @@
   </form>
   
   <div class="c-result">
-    <div *ngIf="loading" class="p-mt-3">
+    <div *ngIf="loading" class="mt-3">
       <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
     </div>
     
-    <div *ngIf="!loading && prediction !== undefined" class="p-mt-3">
+    <div *ngIf="!loading && prediction !== undefined" class="mt-3">
       <h1>Resultado da predição de ID '{{prediction.id}}'</h1>
       <p-image 
         [src]="prediction.img_file_path"
         [alt]="'Imagem do modelo ' + selectedModel + ' do ID ' + prediction.id" 
         width="350" 
-        class="p-mb-3">
+        class="mb-3">
       </p-image>
       <p>Fratura detectada? {{ prediction.fractured ? 'Sim' : 'Não' }}</p>
     </div>
