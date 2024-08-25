@@ -19,6 +19,7 @@ export class SearchComponent {
   onSearch(): void {
     if (this.searchId !== null) {
       this.loading = true;
+      this.prediction = {} as Predictions;
       this.error = null;
 
       this.dataService.getPredictionById(this.searchId).subscribe({
