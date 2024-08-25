@@ -1,8 +1,8 @@
-<div class="search-container p-fluid">
+<div class="search-container p-fluid mt-1">
     <div>
-        <div class="p-field">
+        <div class="p-field my-1">
           <label for="searchId">ID da Predição:</label>
-          <input id="searchId" type="number" pInputText [(ngModel)]="searchId" placeholder="Digite o ID da predição" />
+          <input id="searchId" type="number" pInputText [(ngModel)]="searchId" min="0" placeholder="Digite o ID da predição" />
         </div>
         <button pButton type="button" label="Pesquisar" icon="pi pi-search" (click)="onSearch()" [disabled]="searchId === null || searchId < 1"></button>
     </div>

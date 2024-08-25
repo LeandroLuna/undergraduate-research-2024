@@ -1,15 +1,15 @@
-<p-menubar>
+<p-menubar ngSkipHydration>
     <ng-template pTemplate="start">
       <a routerLink="/">
         <img src="logo.png" height="40" alt="logo">
       </a>
     </ng-template>
     <ng-template pTemplate="end">
-      <a class="p-button font-bold" routerLink="/search" style="margin-right: 10px">
-        <span class="pi pi-search" style="padding-right: 10px;"></span>Pesquisar
+      <a class="p-button font-bold mr-1" routerLink="/search">
+        <span class="pi pi-search pr-1"></span>Pesquisar
       </a>
       <a class="p-button font-bold" routerLink="/predict">
-        <span class="pi pi-check" style="padding-right: 10px"></span>Nova predição
+        <span class="pi pi-check pr-1"></span>Nova predição
       </a>
     </ng-template>
 </p-menubar>
