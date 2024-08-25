@@ -6,3 +6,60 @@ body {
 router-outlet {
     height: 100%;
 }   
+
+.mr-1{
+    margin-right: 10px;
+}
+
+.pr-1{
+    padding-right: 10px;
+}
+
+.mt-3{
+    margin-top: 20px;
+}
+
+.mt-1{
+    margin-top: 10px;
+}
+
+.my-1{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.mb-3{
+    margin-bottom: 20px;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.container{
+    height: 100%;
+}
+
+.p-fluid {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.p-field {
+    margin-bottom: 1rem;
+}
+
+p-toolbar {
+    margin-top: 1em;
+}
+
+p-menubar {
+    margin-bottom: 1em;
+}
