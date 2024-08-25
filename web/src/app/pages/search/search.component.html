@@ -17,6 +17,10 @@
     </div>
     
     <div *ngIf="error && !loading" class="p-mt-3">
-        <p-messages severity="error">{{ error }}</p-messages>
+        <p-messages severity="error">
+            <ng-template pTemplate>
+                <div >{{error}}</div>
+            </ng-template>
+        </p-messages>
     </div>    
 </div>
