@@ -10,6 +10,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PaginatorModule } from 'primeng/paginator';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { MessagesModule } from 'primeng/messages';
     ProgressSpinnerModule,
     PaginatorModule,
     ToastModule,
-    MessagesModule
+    MessagesModule,
+    TableModule
   ]
 })
 export class ComponentsModule { }

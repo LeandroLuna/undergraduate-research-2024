@@ -1,4 +1,4 @@
-<div class="container">
+<div class="p-fluid">
     <div *ngIf="predictions !== undefined; else loading">
         <div *ngFor="let prediction of predictions.results">
             <app-panel [prediction]="prediction"></app-panel>
