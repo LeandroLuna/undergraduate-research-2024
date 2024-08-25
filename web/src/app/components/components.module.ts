@@ -9,6 +9,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PaginatorModule } from 'primeng/paginator';
 import { ToastModule } from 'primeng/toast';
+import { MessagesModule } from 'primeng/messages';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ToastModule } from 'primeng/toast';
     RadioButtonModule,
     ProgressSpinnerModule,
     PaginatorModule,
-    ToastModule
+    ToastModule,
+    MessagesModule
   ]
 })
 export class ComponentsModule { }
