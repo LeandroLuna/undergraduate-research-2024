@@ -5,7 +5,11 @@
       </a>
     </ng-template>
     <ng-template pTemplate="end">
-      <p-button  label="Pesquisar" icon="pi pi-search" severity="primary" routerLink="/search"></p-button>
-      <p-button label="Nova predição" icon="pi pi-check" severity="primary" routerLink="/predict"></p-button>
+      <a class="p-button font-bold" routerLink="/search">
+        <span class="pi pi-search"></span>Pesquisar
+      </a>
+      <a class="p-button font-bold" routerLink="/predict">
+        <span class="pi pi-check"></span>Nova predição
+      </a>
     </ng-template>
 </p-menubar>
