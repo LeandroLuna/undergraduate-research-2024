@@ -12,6 +12,7 @@ export class TeamComponent {
     { name: 'Guilherme Campanha', linkedin: 'https://www.linkedin.com/in/guilhermecampanha/' },
     { name: 'Isabela Brito', linkedin: 'https://www.linkedin.com/in/isabela-brito-pessoa-3b1a061a0/' },
     { name: 'Leandro Luna', linkedin: 'https://www.linkedin.com/in/luna-leandro/' },
-    { name: 'Marcos Santos', linkedin: 'https://www.linkedin.com/in/marcos-ms06/' }
+    { name: 'Marcos Santos', linkedin: 'https://www.linkedin.com/in/marcos-ms06/' },
+    { name: 'Valter Santigo', linkedin: 'https://www.linkedin.com/in/valtersrf/' }
   ];
 }
