@@ -26,7 +26,7 @@ export class SearchComponent {
           this.prediction = data;
           this.loading = false;
         },
-        error: (err) => {
+        error: (_err) => {
           this.error = `Predição de ID '${this.searchId}' não encontrada.`;
           this.loading = false;
         }
