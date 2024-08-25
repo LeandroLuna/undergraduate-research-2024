@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Prediction, PredictionsList } from '../interfaces/predictions';
+import { Prediction, PredictionsList, Predictions } from '../interfaces/predictions';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -25,8 +25,8 @@ export class DataService {
     return this.http.get<{ total_records: number }>(`${this._BASE_URL}/v1/predictions/total`);
   }
 
-  getPredictionById(id: number): Observable<Prediction> {
-    return this.http.get<Prediction>(`${this._BASE_URL}/v1/predictions/${id}`);
+  getPredictionById(id: number): Observable<Predictions> {
+    return this.http.get<Predictions>(`${this._BASE_URL}/v1/predictions/${id}`);
   }
 
   predictFracturesOnImage(image: File, model: string): Observable<Prediction> {
