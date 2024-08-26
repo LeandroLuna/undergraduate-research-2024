@@ -19,8 +19,8 @@ export class PredictComponent implements AfterViewInit {
   WIDTH = 640;
   HEIGHT = 480;
   
-  @ViewChild('video') public video!: ElementRef;
-  @ViewChild('canvas') public canvas!: ElementRef;
+  @ViewChild('video') video!: ElementRef;
+  @ViewChild('canvas') canvas!: ElementRef;
 
   error: any;
   isCaptured: boolean = false;
@@ -37,16 +37,14 @@ export class PredictComponent implements AfterViewInit {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (stream) {
-          this.video.nativeElement.srcObject = stream;
-          this.video.nativeElement.play();
-          this.error = null;
-        } else {
-          this.error = "Nenhum dispositivo de vídeo encontrado";
-        }
-      } catch (e) {
-        this.error = e;
+        this.video.nativeElement.srcObject = stream;
+        this.video.nativeElement.play();
+        this.error = null;
+      } catch (err: any) {
+        this.error = "Erro ao acessar a câmera: " + err.message;
       }
+    } else {
+      this.error = "Dispositivo não suporta acesso a webcam.";
     }
   }
 
@@ -63,7 +61,9 @@ export class PredictComponent implements AfterViewInit {
   }
 
   drawImageToCanvas(image: any) {
-    this.canvas.nativeElement.getContext('2d').drawImage(image, 0, 0, this.WIDTH, this.HEIGHT);
+    const context = this.canvas.nativeElement.getContext('2d');
+    context.clearRect(0, 0, this.WIDTH, this.HEIGHT);
+    context.drawImage(image, 0, 0, this.WIDTH, this.HEIGHT);
   }
 
   onFileSelected(event: any): void {

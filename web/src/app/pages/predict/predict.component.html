@@ -5,13 +5,11 @@
         <div class="p-field">
           <label for="image">Selecione ou capture a radiografia:</label>
           
-          <!-- Alternativa de seleção: Escolher arquivo ou usar webcam -->
           <div class="p-field-radiobutton">
-            <p-radioButton name="source" value="file" [(ngModel)]="selectedSource" inputId="file" label="Selecionar Arquivo"></p-radioButton>
-            <p-radioButton name="source" value="webcam" [(ngModel)]="selectedSource" inputId="webcam" label="Capturar com Webcam"></p-radioButton>
+            <p-radioButton name="source" value="file" class="mr-1" [(ngModel)]="selectedSource" inputId="file" label="Selecionar arquivo"></p-radioButton>
+            <p-radioButton name="source" value="webcam" [(ngModel)]="selectedSource" inputId="webcam" label="Capturar com webcam"></p-radioButton>
           </div>
           
-          <!-- Se o usuário escolher "Selecionar Arquivo" -->
           <div *ngIf="selectedSource === 'file'">
             <p-fileUpload 
               name="image" 
@@ -28,12 +26,14 @@
           
           <div *ngIf="selectedSource === 'webcam'" class="mt-2">
             <div class="video-container" *ngIf="!error">
-              <video [class.show]="!isCaptured" [class.hide]="isCaptured" #video id="video" [width]="WIDTH" [height]="HEIGHT" autoplay></video>
-              <canvas [class.show]="isCaptured" [class.hide]="!isCaptured" #canvas id="canvas" [width]="WIDTH" [height]="HEIGHT"></canvas>
+              <video #video id="video" [width]="WIDTH" [height]="HEIGHT" autoplay playsinline></video>
+              <canvas #canvas id="canvas" [width]="WIDTH" [height]="HEIGHT"></canvas>
             </div>
-
-            <button class="btn btn-primary mt-2" *ngIf="!isCaptured" (click)="capture()">Capturar Foto</button>
-            <button class="btn btn-danger mt-2" *ngIf="isCaptured" (click)="removeCurrent()">Capturar Novamente</button>
+          
+            <p *ngIf="error" class="error">{{ error }}</p>
+          
+            <button class="btn btn-primary mt-2" type="button" *ngIf="!isCaptured" (click)="capture()">Capturar foto</button>
+            <button class="btn btn-danger mt-2" type="button" *ngIf="isCaptured" (click)="removeCurrent()">Capturar novamente</button>
           </div>
         </div>
 
