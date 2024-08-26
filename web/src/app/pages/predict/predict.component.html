@@ -4,37 +4,47 @@
       <div>
         <div class="p-field">
           <label for="image">Selecione ou capture a radiografia:</label>
-          <p-fileUpload 
-            name="image" 
-            url="#" 
-            class="mt-1"
-            chooseLabel="Selecionar Imagem" 
-            (onSelect)="onFileSelected($event)" 
-            accept="image/*" 
-            mode="basic"
-            auto
-            [customUpload]="true">
-          </p-fileUpload>
+          
+          <!-- Alternativa de seleção: Escolher arquivo ou usar webcam -->
+          <div class="p-field-radiobutton">
+            <p-radioButton name="source" value="file" [(ngModel)]="selectedSource" inputId="file" label="Selecionar Arquivo"></p-radioButton>
+            <p-radioButton name="source" value="webcam" [(ngModel)]="selectedSource" inputId="webcam" label="Capturar com Webcam"></p-radioButton>
+          </div>
+          
+          <!-- Se o usuário escolher "Selecionar Arquivo" -->
+          <div *ngIf="selectedSource === 'file'">
+            <p-fileUpload 
+              name="image" 
+              url="#" 
+              class="mt-1"
+              chooseLabel="Selecionar Imagem" 
+              (onSelect)="onFileSelected($event)" 
+              accept="image/*" 
+              mode="basic"
+              auto
+              [customUpload]="true">
+            </p-fileUpload>
+          </div>
+          
+          <div *ngIf="selectedSource === 'webcam'" class="mt-2">
+            <div class="video-container" *ngIf="!error">
+              <video [class.show]="!isCaptured" [class.hide]="isCaptured" #video id="video" [width]="WIDTH" [height]="HEIGHT" autoplay></video>
+              <canvas [class.show]="isCaptured" [class.hide]="!isCaptured" #canvas id="canvas" [width]="WIDTH" [height]="HEIGHT"></canvas>
+            </div>
+
+            <button class="btn btn-primary mt-2" *ngIf="!isCaptured" (click)="capture()">Capturar Foto</button>
+            <button class="btn btn-danger mt-2" *ngIf="isCaptured" (click)="removeCurrent()">Capturar Novamente</button>
+          </div>
+        </div>
+
+        <div class="p-field-radiobutton">
+          <p-radioButton name="model" value="segment" [(ngModel)]="selectedModel" inputId="segment" label="Segmentação"></p-radioButton>
         </div>
         <div class="p-field-radiobutton">
-          <p-radioButton 
-            name="model" 
-            value="segment" 
-            [(ngModel)]="selectedModel" 
-            inputId="segment">
-          </p-radioButton>
-          <label for="segment">Segmentação</label>
+          <p-radioButton name="model" value="detect" [(ngModel)]="selectedModel" inputId="detect" label="Detecção"></p-radioButton>
         </div>
-        <div class="p-field-radiobutton">
-          <p-radioButton 
-            name="model" 
-            value="detect" 
-            [(ngModel)]="selectedModel" 
-            inputId="detect">
-          </p-radioButton>
-          <label for="detect">Detecção</label>
-        </div>
-        <button pButton type="submit" label="Predizer fraturas" class="mt-1" [disabled]="!imageFile || !selectedModel || loading"></button>
+
+        <button pButton type="submit" label="Predizer fraturas" class="mt-1" [disabled]="!imageFile && !capturedImage || !selectedModel || loading"></button>
       </div>
     </form>
     

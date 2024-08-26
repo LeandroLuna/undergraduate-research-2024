@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Prediction, PredictionModel } from '../../interfaces/predictions';
 import { MessageService } from 'primeng/api';
@@ -6,37 +6,102 @@ import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-predict',
   templateUrl: './predict.component.html',
-  styleUrl: './predict.component.scss'
+  styleUrls: ['./predict.component.scss']
 })
-export class PredictComponent {
+export class PredictComponent implements AfterViewInit {
   imageFile: File | null = null;
+  capturedImage: string | null = null;
+  selectedSource: string = 'file';
   selectedModel: string = '';
   prediction!: PredictionModel;
-  loading: boolean = false; 
+  loading: boolean = false;
+  
+  WIDTH = 640;
+  HEIGHT = 480;
+  
+  @ViewChild('video') public video!: ElementRef;
+  @ViewChild('canvas') public canvas!: ElementRef;
 
-  constructor(private dataService: DataService, private messageService: MessageService){}
+  error: any;
+  isCaptured: boolean = false;
+
+  constructor(private dataService: DataService, private messageService: MessageService) {}
+
+  ngAfterViewInit() {
+    if (this.selectedSource === 'webcam') {
+      this.setupDevices();
+    }
+  }
+
+  async setupDevices() {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        if (stream) {
+          this.video.nativeElement.srcObject = stream;
+          this.video.nativeElement.play();
+          this.error = null;
+        } else {
+          this.error = "Nenhum dispositivo de vídeo encontrado";
+        }
+      } catch (e) {
+        this.error = e;
+      }
+    }
+  }
+
+  capture() {
+    this.drawImageToCanvas(this.video.nativeElement);
+    this.capturedImage = this.canvas.nativeElement.toDataURL('image/png');
+    this.isCaptured = true;
+    this.messageService.add({ severity: 'success', summary: 'Imagem capturada.', detail: 'A imagem foi capturada com sucesso.' });
+  }
+
+  removeCurrent() {
+    this.isCaptured = false;
+    this.capturedImage = null;
+  }
+
+  drawImageToCanvas(image: any) {
+    this.canvas.nativeElement.getContext('2d').drawImage(image, 0, 0, this.WIDTH, this.HEIGHT);
+  }
 
   onFileSelected(event: any): void {
     if (event.files && event.files.length > 0) {
       this.imageFile = event.files[0];
-
-      this.messageService.add({severity: 'success', summary: 'Imagem selecionada.', detail: this.imageFile!.name});
+      this.capturedImage = null;
+      this.messageService.add({ severity: 'success', summary: 'Imagem selecionada.', detail: this.imageFile!.name });
     }
   }
 
   onSubmit(): void {
-    if (this.imageFile && this.selectedModel) {
+    if ((this.imageFile || this.capturedImage) && this.selectedModel) {
       this.loading = true;
-      this.dataService.predictFracturesOnImage(this.imageFile, this.selectedModel).subscribe({
+
+      let imageData: File | string = this.imageFile || this.capturedImage as string;
+      
+      if (typeof imageData === 'string') {
+        const byteString = atob(imageData.split(',')[1]);
+        const mimeString = imageData.split(',')[0].split(':')[1].split(';')[0];
+        const buffer = new ArrayBuffer(byteString.length);
+        const data = new Uint8Array(buffer);
+        for (let i = 0; i < byteString.length; i++) {
+          data[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([buffer], { type: mimeString });
+        imageData = new File([blob], "captured-image.png", { type: mimeString });
+      }
+
+      this.dataService.predictFracturesOnImage(imageData, this.selectedModel).subscribe({
         next: (data: Prediction) => {
           this.prediction = data.results;
           this.loading = false;
         },
         error: (error) => {
           this.loading = false;
-          console.error(error)
+          console.error(error);
         }
-      })
+      });
     }
   }
 }
