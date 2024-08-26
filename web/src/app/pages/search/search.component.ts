@@ -10,7 +10,7 @@ import { DataService } from '../../services/data.service';
 
 export class SearchComponent {
   searchId: number | null = null;
-  prediction!: Predictions;
+  prediction: Predictions | null = null;
   error: string | null = null;
   loading: boolean = false;
 
@@ -19,7 +19,7 @@ export class SearchComponent {
   onSearch(): void {
     if (this.searchId !== null) {
       this.loading = true;
-      this.prediction = {} as Predictions;
+      this.prediction = null;
       this.error = null;
 
       this.dataService.getPredictionById(this.searchId).subscribe({
