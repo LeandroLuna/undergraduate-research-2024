@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Prediction, PredictionModel } from '../../interfaces/predictions';
 import { MessageService } from 'primeng/api';
@@ -8,7 +8,7 @@ import { MessageService } from 'primeng/api';
   templateUrl: './predict.component.html',
   styleUrls: ['./predict.component.scss']
 })
-export class PredictComponent implements AfterViewInit {
+export class PredictComponent implements OnChanges{
   imageFile: File | null = null;
   capturedImage: string | null = null;
   selectedSource: string = 'file';
@@ -16,8 +16,8 @@ export class PredictComponent implements AfterViewInit {
   prediction!: PredictionModel;
   loading: boolean = false;
   
-  WIDTH = 640;
-  HEIGHT = 480;
+  WIDTH = 600;
+  HEIGHT = 337;
   
   @ViewChild('video') video!: ElementRef;
   @ViewChild('canvas') canvas!: ElementRef;
@@ -27,8 +27,8 @@ export class PredictComponent implements AfterViewInit {
 
   constructor(private dataService: DataService, private messageService: MessageService) {}
 
-  ngAfterViewInit() {
-    if (this.selectedSource === 'webcam') {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['selectedSource']) {
       this.setupDevices();
     }
   }
@@ -40,11 +40,16 @@ export class PredictComponent implements AfterViewInit {
         this.video.nativeElement.srcObject = stream;
         this.video.nativeElement.play();
         this.error = null;
-      } catch (err: any) {
-        this.error = "Erro ao acessar a câmera: " + err.message;
+      } catch (e: any) {
+        if (e.name === 'AbortError') {
+          console.warn('A operação foi abortada.', e);
+        } else {
+          this.error = e;
+          console.error('Erro ao acessar a webcam:', e);
+        }
       }
     } else {
-      this.error = "Dispositivo não suporta acesso a webcam.";
+      this.error = "getUserMedia não é suportado no navegador.";
     }
   }
 

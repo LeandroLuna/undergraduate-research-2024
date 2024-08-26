@@ -5,16 +5,15 @@
         <div class="p-field">
           <label for="image">Selecione ou capture a radiografia:</label>
           
-          <div class="p-field-radiobutton">
+          <div class="p-field-radiobutton my-1">
             <p-radioButton name="source" value="file" class="mr-1" [(ngModel)]="selectedSource" inputId="file" label="Selecionar arquivo"></p-radioButton>
-            <p-radioButton name="source" value="webcam" [(ngModel)]="selectedSource" inputId="webcam" label="Capturar com webcam"></p-radioButton>
+            <p-radioButton name="source" value="webcam" [(ngModel)]="selectedSource" (ngModelChange)="setupDevices()" inputId="webcam" label="Capturar com webcam"></p-radioButton>
           </div>
           
           <div *ngIf="selectedSource === 'file'">
             <p-fileUpload 
               name="image" 
               url="#" 
-              class="mt-1"
               chooseLabel="Selecionar Imagem" 
               (onSelect)="onFileSelected($event)" 
               accept="image/*" 
@@ -24,16 +23,16 @@
             </p-fileUpload>
           </div>
           
-          <div *ngIf="selectedSource === 'webcam'" class="mt-2">
+          <div *ngIf="selectedSource === 'webcam'" class="mt-1">
             <div class="video-container" *ngIf="!error">
-              <video #video id="video" [width]="WIDTH" [height]="HEIGHT" autoplay playsinline></video>
-              <canvas #canvas id="canvas" [width]="WIDTH" [height]="HEIGHT"></canvas>
+              <video [class.show]="!isCaptured" [class.hide]="isCaptured" #video id="video" [width]="WIDTH" [height]="HEIGHT" autoplay></video>
+              <canvas [class.show]="isCaptured" [class.hide]="!isCaptured" #canvas id="canvas" [width]="WIDTH" [height]="HEIGHT"></canvas>
             </div>
-          
-            <p *ngIf="error" class="error">{{ error }}</p>
-          
-            <button class="btn btn-primary mt-2" type="button" *ngIf="!isCaptured" (click)="capture()">Capturar foto</button>
-            <button class="btn btn-danger mt-2" type="button" *ngIf="isCaptured" (click)="removeCurrent()">Capturar novamente</button>
+
+            <div class="mt-1" style="display: flex; justify-content: center">
+              <button pButton label="Capturar foto" style="width: 50%;" class="p-button-info" type="button" *ngIf="!isCaptured" (click)="capture()"></button>
+              <button pButton label="Capturar novamente" style="width: 50%;" class="p-button-danger" type="button" *ngIf="isCaptured" (click)="removeCurrent()"></button>
+            </div>
           </div>
         </div>
 
@@ -44,7 +43,7 @@
           <p-radioButton name="model" value="detect" [(ngModel)]="selectedModel" inputId="detect" label="Detecção"></p-radioButton>
         </div>
 
-        <button pButton type="submit" label="Predizer fraturas" class="mt-1" [disabled]="!imageFile && !capturedImage || !selectedModel || loading"></button>
+        <button pButton type="submit" label="Predizer fraturas" class="my-3" [disabled]="!imageFile && !capturedImage || !selectedModel || loading"></button>
       </div>
     </form>
     
