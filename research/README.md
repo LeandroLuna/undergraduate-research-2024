@@ -36,13 +36,13 @@ source . venv/bin/activate.fish  # On Windows use: venv\Scripts\activate or Linu
 
 Commands that could be useful to setup the environment: 
 
-- sudo apt-get install nvidia-utils-515
+- sudo apt-get install -y nvidia-utils-515
 
 - sudo apt-get install -y libgl1-mesa-dev
 
-<!-- - nano "/Users/leandroluna/Library/Application Support/Ultralytics/settings.yaml" # (deixar "dataset", removendo o "s") -->
+- nano "/Users/leandroluna/Library/Application Support/Ultralytics/settings.yaml" # (deixar "dataset", removendo o "s")
 
-- sudo apt-get install unzip
+- sudo apt-get install -y unzip
 
 - unzip file.zip
 
