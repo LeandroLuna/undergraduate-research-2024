@@ -41,6 +41,7 @@ export class DataService {
       tap({
         next: (prediction) => {
           localStorage.setItem('lastPrediction', JSON.stringify(prediction.results));
+          localStorage.setItem('lastPredictionTime', new Date().toISOString());
         },
         error: () => {
           console.error('An error occurred while predicting fractures on image.');

@@ -1,5 +1,5 @@
 <div *ngIf="prediction !== undefined" class="container mt-1 center">
-    <h1>Última predição de ID '{{ prediction.id }}'</h1>
+    <h1>Atualizado em: {{ lastUpdated | date: 'dd/MM/yyyy, HH:mm:ss' }}</h1>
     <p-image 
         [src]="prediction.img_file_path"
         [alt]="'Imagem predita do ID ' + prediction.id" 

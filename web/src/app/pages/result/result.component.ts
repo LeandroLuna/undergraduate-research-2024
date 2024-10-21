@@ -9,6 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class ResultComponent implements OnInit {
   prediction!: PredictionModel;
+  lastUpdated: Date | undefined;
   
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
@@ -17,12 +18,13 @@ export class ResultComponent implements OnInit {
       const storedPrediction = localStorage.getItem('lastPrediction');
       if (storedPrediction) {
         this.prediction = JSON.parse(storedPrediction);
+        this.lastUpdated = new Date(localStorage.getItem('lastPredictionTime')!);
       }
   
       window.addEventListener('storage', (event) => {
         if (event.key === 'lastPrediction' && event.newValue) {
           this.prediction = JSON.parse(event.newValue);
-          console.log('New prediction:', this.prediction);
+          this.lastUpdated = new Date(localStorage.getItem('lastPredictionTime')!);
         }
       });
     }
