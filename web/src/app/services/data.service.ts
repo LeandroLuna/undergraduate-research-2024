@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Prediction, PredictionsList, Predictions } from '../interfaces/predictions';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -37,6 +37,15 @@ export class DataService {
       headers: {
         'Accept': 'application/json'
       }
-    });
+    }).pipe(
+      tap({
+        next: (prediction) => {
+          localStorage.setItem('lastPrediction', JSON.stringify(prediction.results));
+        },
+        error: () => {
+          console.error('An error occurred while predicting fractures on image.');
+        }
+      })
+    );;
   }
 }

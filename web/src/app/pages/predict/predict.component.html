@@ -51,17 +51,6 @@
       <div *ngIf="loading" class="mt-3">
         <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
       </div>
-      
-      <div *ngIf="!loading && prediction !== undefined" class="my-3">
-        <h1>Resultado da predição de ID '{{prediction.id}}'</h1>
-        <p-image 
-          [src]="prediction.img_file_path"
-          [alt]="'Imagem do modelo ' + selectedModel + ' do ID ' + prediction.id" 
-          width="350" 
-          class="mb-3">
-        </p-image>
-        <p>Fratura detectada? {{ prediction.fractured ? 'Sim' : 'Não' }}</p>
-      </div>
     </div>
   </div>
 </div>
